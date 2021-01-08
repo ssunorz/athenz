@@ -48,6 +48,7 @@ import com.yahoo.athenz.zms.RoleMeta;
 import com.yahoo.athenz.zts.cert.*;
 import com.yahoo.athenz.zts.notification.ZTSNotificationTaskFactory;
 import com.yahoo.athenz.zts.store.CloudStore;
+import com.yahoo.athenz.zts.store.CustomizedDataStore;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.eclipse.jetty.util.StringUtil;
 import org.slf4j.Logger;
@@ -292,7 +293,7 @@ public class ZTSImpl implements KeyStore, ZTSHandler {
             // create our data store. we must have our cloud store and private
             // key details already retrieved at this point
             
-            dataStore = new DataStore(clogStore, cloudStore);
+            dataStore = getDataStore(clogStore, cloudStore);
             
             // Initialize our storage subsystem which would load all data into
             // memory and if necessary retrieve the data from ZMS. It will also
@@ -533,7 +534,12 @@ public class ZTSImpl implements KeyStore, ZTSHandler {
         schema = ZTSSchema.instance();
         validator = new Validator(schema);
     }
-    
+
+    DataStore getDataStore(ChangeLogStore clogStore, CloudStore cloudStore) {
+        // TODO Use a Factory class
+        return new CustomizedDataStore(clogStore, cloudStore);
+    }
+
     ChangeLogStore getChangeLogStore(String homeDir) {
 
         final String clogFactoryClass = System.getProperty(ZTSConsts.ZTS_PROP_CHANGE_LOG_STORE_FACTORY_CLASS,
