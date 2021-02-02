@@ -211,6 +211,11 @@
       <artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
       <version>${swagger.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>3.9.0</version>
+    </dependency>
   </dependencies>
 
   <build>

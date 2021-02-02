@@ -107,7 +107,19 @@ public class DataStore implements DataCacheProvider, RolesProvider {
         
         /* generate our cache stores */
 
-        cacheStore = CacheBuilder.newBuilder().concurrencyLevel(25).build();
+        final String cacheStoreFactoryClass = System.getProperty(ZTSConsts.ZTS_PROP_CACHE_STORE_FACTORY_CLASS,
+                "com.yahoo.athenz.zts.store.impl.DefaultCacheStoreFactory");
+        CacheStoreFactory cacheStoreFactory;
+
+        try {
+            cacheStoreFactory = (CacheStoreFactory) Class.forName(cacheStoreFactoryClass).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            LOGGER.error("Invalid CacheStoreFactory class: " + cacheStoreFactoryClass
+                    + " error: " + e.getMessage());
+            throw new IllegalArgumentException("Invalid status checker factory class");
+        }
+        cacheStore = cacheStoreFactory.create();
+
         zmsPublicKeyCache = CacheBuilder.newBuilder().concurrencyLevel(25).build();
 
         groupMemberCache = CacheBuilder.newBuilder().concurrencyLevel(25).build();
