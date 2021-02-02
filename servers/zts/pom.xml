@@ -29,6 +29,7 @@
 
   <properties>
     <code.coverage.min>0.98</code.coverage.min>
+    <checkstyle.skip>true</checkstyle.skip>
   </properties>
 
   <dependencyManagement>
