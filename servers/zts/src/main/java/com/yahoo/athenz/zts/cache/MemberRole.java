@@ -16,10 +16,13 @@
 package com.yahoo.athenz.zts.cache;
 
 public class MemberRole {
-    
-    final String role;
-    final long expiration;
-    
+
+    String role = null;
+    long expiration = 0L;
+
+    public MemberRole() {
+    }
+
     public MemberRole(String role, long expiration) {
         this.role = role;
         this.expiration = expiration;
