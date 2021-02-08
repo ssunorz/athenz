@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInputStream;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.minlog.Log;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.collect.ImmutableMap;
@@ -178,6 +179,8 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
 
     @Override
     public Cache<String, DataCache> create() {
+        Log.set(Log.LEVEL_TRACE);
+
         String rootDirectory = System.getProperty(KEY_PREFIX + "persistence_dir");
         long heapSize = Long.parseLong(System.getProperty(KEY_PREFIX + "cache_heap_entries"));
         long diskSize = Long.parseLong(System.getProperty(KEY_PREFIX + "cache_disk_gb"));
