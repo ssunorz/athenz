@@ -21,11 +21,11 @@ import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.spi.serialization.Serializer;
 import org.ehcache.spi.serialization.SerializerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -167,21 +167,31 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
         }
     }
 
+    private static final String ALIAS = "ehcache";
+    private static final String KEY_PREFIX = "athenz.zts.ehcache_store.";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EhcacheCacheStoreFactory.class);
+
     @Override
     public Cache<String, DataCache> create() {
-        String alias = "ehcache";
+        String rootDirectory = System.getProperty(KEY_PREFIX + "persistence_dir");
+        long heapSize = Long.parseLong(System.getProperty(KEY_PREFIX + "cache_heap_entries"));
+        long diskSize = Long.parseLong(System.getProperty(KEY_PREFIX + "cache_disk_gb"));
+
+        LOGGER.info("rootDirectory: {}, heapSize: {}, diskSize: {}", rootDirectory, heapSize, diskSize);
+
         PersistentCacheManager persistentCacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-                .with(CacheManagerBuilder.persistence(new File("")))
-                .withCache(alias,
+                .with(CacheManagerBuilder.persistence(rootDirectory))
+                .withCache(ALIAS,
                         CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, DataCache.class,
                                 ResourcePoolsBuilder.newResourcePoolsBuilder()
-                                        .heap(10, EntryUnit.ENTRIES)
-                                        .disk(1, MemoryUnit.GB, true)
+                                        .heap(heapSize, EntryUnit.ENTRIES)
+                                        .disk(diskSize, MemoryUnit.GB, true)
                         ).withValueSerializer(DataCacheSerializer.class)
                 ).build(true);
 
         org.ehcache.Cache<String, DataCache> ehcache =
-                persistentCacheManager.getCache(alias, String.class, DataCache.class);
+                persistentCacheManager.getCache(ALIAS, String.class, DataCache.class);
 
         return new EhcacheCache(ehcache);
     }

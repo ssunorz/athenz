@@ -109,6 +109,9 @@ public class DataStore implements DataCacheProvider, RolesProvider {
 
         final String cacheStoreFactoryClass = System.getProperty(ZTSConsts.ZTS_PROP_CACHE_STORE_FACTORY_CLASS,
                 "com.yahoo.athenz.zts.store.impl.DefaultCacheStoreFactory");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("cacheStoreFactoryClass: {}", cacheStoreFactoryClass);
+        }
         CacheStoreFactory cacheStoreFactory;
 
         try {
