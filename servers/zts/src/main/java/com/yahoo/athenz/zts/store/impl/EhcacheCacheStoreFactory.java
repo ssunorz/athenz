@@ -142,6 +142,8 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
             kryo.register(GroupAuditLog.class);
 
             kryo.register(Timestamp.class);
+
+            kryo.register(AssertionEffect.class);
         }
 
         public DataCacheSerializer(ClassLoader cl) {
