@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -116,6 +117,7 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
         private void regist() {
             kryo.register(HashMap.class);
             kryo.register(HashSet.class);
+            kryo.register(ArrayList.class);
 
             kryo.register(DataCache.class);
             kryo.register(DomainData.class);
