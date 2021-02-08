@@ -148,6 +148,7 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
         }
 
         public DataCacheSerializer(ClassLoader cl) {
+            Log.set(Log.LEVEL_TRACE);
             regist();
         }
 
@@ -179,7 +180,6 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
 
     @Override
     public Cache<String, DataCache> create() {
-        Log.set(Log.LEVEL_TRACE);
 
         String rootDirectory = System.getProperty(KEY_PREFIX + "persistence_dir");
         long heapSize = Long.parseLong(System.getProperty(KEY_PREFIX + "cache_heap_entries"));
