@@ -109,7 +109,7 @@ public class EhcacheCacheStoreFactory implements CacheStoreFactory {
         }
     }
 
-    private static class DataCacheSerializer implements Serializer<DataCache> {
+    public static class DataCacheSerializer implements Serializer<DataCache> {
 
         private final Kryo kryo = new Kryo();
 
